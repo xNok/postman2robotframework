@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-CONCOURSE PIPELINE MAKER
+POSTMAN TO ROBOTFRAMEWOK
 
 Usage:
   postman2robot [--ifile <inputfile>] [--ofile <outputfile>] [options]
@@ -25,6 +25,8 @@ import os
 
 from src.postman_parser import PostmanParser
 
+
+
 # Parse command line argument
 def main():
     ################################################################################################
@@ -40,23 +42,20 @@ def main():
     ####################################
     """)
 
-    print("""
-    {tag} Use {color} postman2robot -h {reset} to lear how to use the command line"
-    """.format(tag=tag.info,color=fg.green,reset=ft.reset))
+    print("{tag} Use {color} postman2robot -h {reset} to learn how to use the command line"
+      .format(tag=tag.info,color=fg.green,reset=ft.reset))
 
     rc_file = ".postman2robotrc"
     if os.path.exists(rc_file):
-        print("""
-        {tag} Loading runtime config from .cpmrc file {reset}"
-        """.format(tag=tag.info,reset=ft.reset,))
+        print("{tag} Loading runtime config from .cpmrc file {reset}"
+          .format(tag=tag.info,reset=ft.reset,))
         with open(rc_file) as f:
             cli_args_rc = json.load(f)
 
         cli_args = always_merger.merge(cli_args, cli_args_rc)
     else:
-        print("""
-        {tag} Locally you can use {color}.postman2robotrc file {reset} to avoide typing options everytime"
-        """.format(tag=tag.info,color=fg.green,reset=ft.reset))
+        print("{tag} You can use a {color}.postman2robotrc file {reset} to avoide typing options everytime"
+          .format(tag=tag.info,color=fg.green,reset=ft.reset))
 
     run(cli_args)
 
