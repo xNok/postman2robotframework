@@ -21,6 +21,7 @@ class Test_PostmanParser:
             "url": "http://httpbin.org/get?lol=true",
             "header": {},
             "body": "",
+            "variables": [],
             "documentation": "Simple GET request with URL Parameters"
         }
 
@@ -32,6 +33,7 @@ class Test_PostmanParser:
                 "Content-Type": "application/json"
             },
             "body": "{\n    \"something\": \"cool\"\n}",
+            "variables": [],
             "documentation": ""
         }
 
@@ -41,6 +43,7 @@ class Test_PostmanParser:
             "url": "http://httpbin.org/delete",
             "header": {},
             "body": "",
+            "variables": [],
             "documentation": ""
         }
 
@@ -50,9 +53,9 @@ class Test_PostmanParser:
             "url": "http://httpbin.org/put",
             "header": {},
             "body": "quotient=223",
+            "variables": [],
             "documentation": ""
         }
-
 
         # THEN: I get 4 keywords
         assert len(library["items"]) == 4

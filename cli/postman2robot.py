@@ -81,4 +81,4 @@ def run(cli_args):
 
     # to save the results
     with open(cli_args["--ofile"] + "/" + lib["name"] + ".py", "w") as fh:
-        fh.write(template.render(name=lib["name"],items=lib["items"]))
+        fh.write(template.render(name=lib["name"],items=lib["items"],variables=lib["variables"]))

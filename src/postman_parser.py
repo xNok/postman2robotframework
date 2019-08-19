@@ -1,4 +1,5 @@
 import json
+import re
 
 class PostmanParser(object):
 
@@ -9,6 +10,7 @@ class PostmanParser(object):
         
         self.library = {
             "name": "",
+            "variables": set(),
             "items": []
         }
 
@@ -42,15 +44,37 @@ class PostmanParser(object):
                     "url": request["url"]["raw"],
                     "header": {h["key"]: h["value"] for h in request["header"]},
                     "body": "",
-                    "documentation": request["description"] if "description" in request else ""
+                    "documentation": request["description"] if "description" in request else "",
+                    "variables": []
                 }
 
                 keyword["body"] = self.body_switcher(item)
+                # if string contains {{foo}}
+                keyword["url"], v = self.prepare_varibles(keyword["url"])
+                keyword["variables"] += v
+                keyword["body"], v = self.prepare_varibles(keyword["body"])
+                keyword["variables"] += v
 
                 keyword_list.append(keyword)
                 keyword_name_list.add(keyword["def_name"])
 
         return keyword_list
+
+    def prepare_varibles(self, s):
+        # variable list
+        v = []
+
+        pattern = re.compile(r'{{(.*?)}}')
+
+        if s != "" and pattern.search(s):
+
+            for m in re.finditer(pattern, s):
+                s = s.replace(m.group(0), "${" + m.group(1) + "}")
+                v.append(m.group(1))
+
+            self.library["variables"].update(v)
+
+        return s, v
 
     def body_switcher(self, item):
 
