@@ -54,3 +54,15 @@ class Test_Postman2Robot:
 
         assert os.path.isfile(collection["generated"])
         assert collection["generated"].read() == collection["expected"].read()
+
+
+    @pytest.mark.parametrize("collection", [("test_with_folder")], indirect=True)
+    def test_with_folder(self, tmpdir, collection):
+        """
+        Given collection.json, generate: library.py
+        """
+
+        postman2robot(self.cli_args)
+
+        assert os.path.isfile(collection["generated"])
+        assert collection["generated"].read() == collection["expected"].read()

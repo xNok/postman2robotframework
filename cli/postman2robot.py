@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-POSTMAN TO ROBOTFRAMEWOK
+POSTMAN TO ROBOTFRAMEWORK
 
 Usage:
   postman2robot [--ifile <inputfile>] [--ofile <outputfile>] [options]
@@ -24,8 +24,6 @@ import json
 import os
 
 from src.postman_parser import PostmanParser
-
-
 
 # Parse command line argument
 def main():

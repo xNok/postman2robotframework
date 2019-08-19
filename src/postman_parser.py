@@ -17,29 +17,40 @@ class PostmanParser(object):
         if self.collection["info"]["schema"] != "https://schema.getpostman.com/json/collection/v2.1.0/collection.json":
             raise Exception('The schema of the collection is invalid expecting v2.1.0')
 
-        self.library["name"] = self.collection["info"]["name"]
-
-        for item in self.collection["item"]:
-            self.library["items"].append(self.get_keyword_from_item(item))
+        self.library["name"]  = self.collection["info"]["name"]
+        self.library["items"] = self.get_keyword_from_items(self.collection["item"])
 
         return self.library
 
-    def get_keyword_from_item(self, item):
+    def get_keyword_from_items(self, items):
 
-        request =  item["request"]
+        keyword_name_list = set()
+        keyword_list = []
 
-        keyword = {
-            "def_name": item["name"].replace(" ", "_"),
-            "method": request["method"],
-            "url": request["url"]["raw"],
-            "header": {h["key"]: h["value"] for h in request["header"]},
-            "body": "",
-            "documentation": request["description"] if "description" in request else ""
-        }
+        for item in items:
+            if "item" in item:
+                new_keywords = self.get_keyword_from_items(item["item"])
+                keyword_list += [k for k in new_keywords if k["def_name"] not in keyword_name_list]
+                keyword_name_list.update(k["def_name"] for k in new_keywords)
+            else:
 
-        keyword["body"] = self.body_switcher(item)
+                request =  item["request"]
 
-        return keyword
+                keyword = {
+                    "def_name": item["name"].replace(" ", "_"),
+                    "method": request["method"],
+                    "url": request["url"]["raw"],
+                    "header": {h["key"]: h["value"] for h in request["header"]},
+                    "body": "",
+                    "documentation": request["description"] if "description" in request else ""
+                }
+
+                keyword["body"] = self.body_switcher(item)
+
+                keyword_list.append(keyword)
+                keyword_name_list.add(keyword["def_name"])
+
+        return keyword_list
 
     def body_switcher(self, item):
 
