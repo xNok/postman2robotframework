@@ -55,8 +55,8 @@ class Test_PostmanParser:
 
 
         # THEN: I get 4 keywords
-        assert len(library) == 4
-        assert library[0] == lib1
-        assert library[1] == lib2
-        assert library[2] == lib3
-        assert library[3] == lib4
+        assert len(library["items"]) == 4
+        assert library["items"][0] == lib1
+        assert library["items"][1] == lib2
+        assert library["items"][2] == lib3
+        assert library["items"][3] == lib4
